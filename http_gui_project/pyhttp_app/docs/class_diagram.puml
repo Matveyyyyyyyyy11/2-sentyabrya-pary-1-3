@@ -1,0 +1,82 @@
+@startuml
+skinparam classAttributeIconSize 0
+package "net" {
+  interface Connection <<ABC>> {
+    +send_all(data)
+    +recv(size)
+    +close()
+  }
+  class Socket
+  class BytesConnection
+  class TcpClient { +connect(host, port, use_tls) }
+  class TcpServer { +start() +accept() +close() }
+  Connection <|.. Socket
+  Connection <|.. BytesConnection
+}
+package "http" {
+  class Url { +parse() +resolve() }
+  class Request
+  class Response
+  class Parser { +parse_request() +parse_response() }
+  class MessageReader { +read_request() +read_response() }
+  class Serializer { +serialize() }
+  Parser ..> MessageReader
+  MessageReader o-- Connection
+  MessageReader ..> Request
+  MessageReader ..> Response
+  Serializer ..> Request
+  Serializer ..> Response
+}
+package "client" {
+  class HttpClient { +get() +post() +set_timeout() +follow_redirects() }
+  HttpClient ..> TcpClient
+  HttpClient ..> Serializer
+  HttpClient ..> MessageReader
+  HttpClient ..> Url
+}
+package "server" {
+  interface RequestHandler <<ABC>> { +__call__(req) }
+  interface RequestObserver <<ABC>> { +on_request(record) }
+  class Router { +route() +route_prefix() +dispatch() }
+  class HttpServer { +start() +stop() }
+  class IndexHandler
+  class EchoHandler
+  class TimeHandler
+  class HeadersHandler
+  class StatusHandler
+  class LoggingObserver
+  class QueueObserver
+  RequestHandler <|.. IndexHandler
+  RequestHandler <|.. EchoHandler
+  RequestHandler <|.. TimeHandler
+  RequestHandler <|.. HeadersHandler
+  RequestHandler <|.. StatusHandler
+  RequestObserver <|.. LoggingObserver
+  RequestObserver <|.. QueueObserver
+  HttpServer o-- Router
+  HttpServer o-- "*" RequestObserver
+  HttpServer ..> TcpServer
+  HttpServer ..> MessageReader
+  Router o-- "*" RequestHandler
+}
+package "gui" {
+  class App
+  class ClientTab
+  class ServerTab
+  class SettingsTab
+  class RequestJob <<Thread>>
+  class HeaderTable
+  class LogTable
+  class ResponseView
+  App *-- ClientTab
+  App *-- ServerTab
+  App *-- SettingsTab
+  ClientTab *-- HeaderTable
+  ClientTab *-- ResponseView
+  ClientTab ..> RequestJob
+  RequestJob ..> HttpClient
+  ServerTab *-- LogTable
+  ServerTab ..> HttpServer
+  ServerTab ..> QueueObserver
+}
+@enduml

@@ -1,0 +1,12 @@
+[MASTER]
+init-hook='import sys; sys.path.insert(0, ".")'
+
+[MESSAGES CONTROL]
+# too-few-public-methods: ABC-интерфейсы и обработчики намеренно содержат один метод
+# too-many-instance-attributes / too-many-arguments: GUI-виджеты и сервер собирают много параметров
+# too-many-ancestors: глубокая иерархия классов tkinter/ttk, от неё не уйти
+# missing-function-docstring: у тривиальных тестов и приватных методов docstring избыточен
+disable=too-many-ancestors,too-few-public-methods,too-many-instance-attributes,too-many-arguments,too-many-positional-arguments,missing-function-docstring,duplicate-code
+
+[FORMAT]
+max-line-length=100

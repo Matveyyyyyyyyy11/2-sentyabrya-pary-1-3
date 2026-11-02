@@ -1,0 +1,92 @@
+$ curl -v http://localhost:8080/
+* Host localhost:8080 was resolved.
+* IPv6: ::1
+* IPv4: 127.0.0.1
+*   Trying 127.0.0.1:8080...
+* Connected to localhost (127.0.0.1) port 8080
+> GET / HTTP/1.1
+> Host: localhost:8080
+> User-Agent: curl/8.5.0
+> Accept: */*
+> 
+< HTTP/1.1 200 OK
+< Content-Type: text/html; charset=utf-8
+< Server: PyHttpGui/1.0
+< Connection: keep-alive
+< Content-Length: 169
+< Date: Sun, 01 Nov 2026 18:07:29 GMT
+< 
+{ [169 bytes data]
+* Connection #0 to host localhost left intact
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Hello</title></head>
+<body><h1>Hello</h1><p>Served by a hand-written HTTP server.</p></body>
+</html>
+
+$ curl -v -X POST -d "hello" http://localhost:8080/echo
+* Host localhost:8080 was resolved.
+* IPv6: ::1
+* IPv4: 127.0.0.1
+*   Trying 127.0.0.1:8080...
+* Connected to localhost (127.0.0.1) port 8080
+> POST /echo HTTP/1.1
+> Host: localhost:8080
+> User-Agent: curl/8.5.0
+> Accept: */*
+> Content-Length: 5
+> Content-Type: application/x-www-form-urlencoded
+> 
+} [5 bytes data]
+< HTTP/1.1 200 OK
+< Content-Type: application/x-www-form-urlencoded
+< Server: PyHttpGui/1.0
+< Connection: keep-alive
+< Content-Length: 5
+< Date: Sun, 01 Nov 2026 18:07:29 GMT
+< 
+{ [5 bytes data]
+* Connection #0 to host localhost left intact
+hello
+$ curl -v http://localhost:8080/status/418
+* Host localhost:8080 was resolved.
+* IPv6: ::1
+* IPv4: 127.0.0.1
+*   Trying 127.0.0.1:8080...
+* Connected to localhost (127.0.0.1) port 8080
+> GET /status/418 HTTP/1.1
+> Host: localhost:8080
+> User-Agent: curl/8.5.0
+> Accept: */*
+> 
+< HTTP/1.1 418 I'm a teapot
+< Content-Type: text/plain; charset=utf-8
+< Server: PyHttpGui/1.0
+< Connection: keep-alive
+< Content-Length: 16
+< Date: Sun, 01 Nov 2026 18:07:29 GMT
+< 
+{ [16 bytes data]
+* Connection #0 to host localhost left intact
+418 I'm a teapot
+$ curl -v http://localhost:8080/nonexistent
+* Host localhost:8080 was resolved.
+* IPv6: ::1
+* IPv4: 127.0.0.1
+*   Trying 127.0.0.1:8080...
+* Connected to localhost (127.0.0.1) port 8080
+> GET /nonexistent HTTP/1.1
+> Host: localhost:8080
+> User-Agent: curl/8.5.0
+> Accept: */*
+> 
+< HTTP/1.1 404 Not Found
+< Content-Type: text/plain; charset=utf-8
+< Server: PyHttpGui/1.0
+< Connection: keep-alive
+< Content-Length: 13
+< Date: Sun, 01 Nov 2026 18:07:29 GMT
+< 
+{ [13 bytes data]
+* Connection #0 to host localhost left intact
+404 Not Found
